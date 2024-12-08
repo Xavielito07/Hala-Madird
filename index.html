@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Quieres ser mi novia?</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffecf2;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        #texto {
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ff1493;
+        }
+
+        .mensaje-amor {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 35px;
+            color: #ff1493;
+            text-align: center;
+            z-index: 1000;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: latido 1s infinite;
+            width: 80%;
+            max-width: 600px;
+            line-height: 1.4;
+        }
+
+        @keyframes latido {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .corazon {
+            position: fixed;
+            font-size: 24px;
+            color: #ff1493;
+            user-select: none;
+            z-index: 999;
+        }
+
+        .botones {
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        button {
+            padding: 10px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+            background-color: #ff69b4;
+            color: white;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+        }
+
+        #no {
+            position: relative;
+        }
+
+        .mensaje-secundario {
+            display: none;
+            position: fixed;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 25px;
+            color: #ff1493;
+            text-align: center;
+            z-index: 1000;
+            opacity: 0;
+            animation: aparecer 2s forwards;
+            animation-delay: 2s;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <h1 id="texto">¿Quieres ser mi novia?</h1>
+    <div class="botones">
+        <button id="si">Sí</button>
+        <button id="no">No</button>
+    </div>
+    <div id="mensajeAmor" class="mensaje-amor">¡Sabía que dirías que SÍ! ❤️</div>
+    <div id="mensajeSecundario" class="mensaje-secundario">¡Te amo mucho! 💖</div>
+
+    <script>
+        const btnNo = document.getElementById('no');
+        const btnSi = document.getElementById('si');
+        const texto = document.getElementById('texto');
+        const mensajeAmor = document.getElementById('mensajeAmor');
+        const mensajeSecundario = document.getElementById('mensajeSecundario');
+
+        function moverBotonNo() {
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 100);
+            btnNo.style.position = 'fixed';
+            btnNo.style.left = x + 'px';
+            btnNo.style.top = y + 'px';
+        }
+
+        btnNo.addEventListener('mouseover', moverBotonNo);
+
+        function crearCorazon() {
+            const corazon = document.createElement('div');
+            corazon.className = 'corazon';
+            const corazones = ['❤️', '💖', '💗', '💓', '💘'];
+            corazon.innerHTML = corazones[Math.floor(Math.random() * corazones.length)];
+            
+            const startX = Math.random() * window.innerWidth;
+            const startY = window.innerHeight;
+            
+            corazon.style.left = startX + 'px';
+            corazon.style.top = startY + 'px';
+            
+            document.body.appendChild(corazon);
+            
+            let posY = startY;
+            let posX = startX;
+            let velocityX = (Math.random() - 0.5) * 4;
+            let velocityY = -Math.random() * 2 - 3;
+            let rotation = 0;
+            
+            function animar() {
+                if (posY < -50 || posX < -50 || posX > window.innerWidth + 50) {
+                    corazon.remove();
+                    return;
+                }
+                
+                posY += velocityY;
+                posX += velocityX;
+                rotation += 2;
+                velocityY += 0.05;
+                
+                corazon.style.top = posY + 'px';
+                corazon.style.left = posX + 'px';
+                corazon.style.transform = `rotate(${rotation}deg)`;
+                
+                requestAnimationFrame(animar);
+            }
+            
+            animar();
+        }
+
+        function lluvia() {
+            setInterval(crearCorazon, 100);
+        }
+
+        btnSi.addEventListener('click', function() {
+            texto.style.display = 'none';
+            btnSi.style.display = 'none';
+            btnNo.style.display = 'none';
+            mensajeAmor.style.display = 'block';
+            mensajeSecundario.style.display = 'block';
+            
+            lluvia();
+            
+            try {
+                const audio = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAEluZm8AAAAPAAAAAwAAAQEAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUxhbWUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MYxAAAAAAQVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+                audio.play();
+            } catch (e) {
+                console.log('No se pudo reproducir el sonido');
+            }
+        });
+    </script>
+</body>
+</html>
